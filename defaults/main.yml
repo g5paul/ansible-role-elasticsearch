@@ -1,5 +1,7 @@
 ---
-elasticsearch_version: '6.x'
+elasticsearch_package: elasticsearch
+elasticsearch_major_version: '6.x'
+elasticsearch_version: '6.5.4'
 elasticsearch_package_state: present
 
 elasticsearch_service_state: started

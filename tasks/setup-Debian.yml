@@ -3,14 +3,28 @@
   apt:
     name: apt-transport-https
     state: present
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Add Elasticsearch apt key.
   apt_key:
     url: https://artifacts.elastic.co/GPG-KEY-elasticsearch
     state: present
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Add Elasticsearch repository.
   apt_repository:
-    repo: 'deb https://artifacts.elastic.co/packages/{{ elasticsearch_version }}/apt stable main'
+    repo: 'deb https://artifacts.elastic.co/packages/{{ elasticsearch_major_version }}/apt stable main'
     state: present
     update_cache: true
+  ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Install elasticsearch
+  apt:
+    name: '{{ elasticsearch_package }}{% if elasticsearch_version is defined and elasticsearch_version != "" %}={{ elasticsearch_version }}{% endif %}'
+    state: present
+    #state: "{{ elasticsearch_package_state }}"
+    #force: '{{ force_install }}'
+    #allow_unauthenticated: "{{ 'no' if elasticsearch_apt_key else 'yes' }}"
+    cache_valid_time: 86400
+  ignore_errors: "{{ ansible_check_mode }}"
+
